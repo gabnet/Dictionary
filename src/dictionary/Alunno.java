@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -26,8 +28,12 @@ import java.util.Properties;
  */
 public class Alunno {
 
-    private String inputFile;
+    private final String inputFile;
     private final String mappaParoleFile = "text\\dizionario.properties";
+    
+    private final String TASTO_ESCI = "Q";
+    private final String TASTO_SUCCESSIVO = "X";
+    private final String TASTO_SALTA = "J";
     
     Alunno(String inputFile) {
         this.inputFile = inputFile;
@@ -36,9 +42,7 @@ public class Alunno {
     public int apprendi() {
 
         try {        
-            BufferedReader lettore;
-
-            lettore = leggiFile(inputFile);
+            BufferedReader lettore = leggiFile(inputFile);
             
             List<String> linee = leggiLinee(lettore);
             
@@ -58,9 +62,7 @@ public class Alunno {
         if (!Files.exists(Paths.get(inputFile)))
             throw new FileNotFoundException(String.format("File: %s", inputFile));
             
-        BufferedReader lettoreBufferizzato = new BufferedReader(new FileReader(new File(inputFile)));
-        
-        return lettoreBufferizzato;
+        return new BufferedReader(new FileReader(new File(inputFile)));
     }
 
     private List<String> leggiLinee(BufferedReader reader) {
@@ -77,12 +79,12 @@ public class Alunno {
         
         linee.stream().forEach(l -> {
             l = ripulisciLinea(l);
-            String[] parole = l.split(" ");
-            Arrays.stream(parole).forEach(w -> {
+            
+            Arrays.stream(l.split(" ")).forEach(w -> {
                 w = w.trim();
                 if (!w.equals(" ") && !w.isEmpty())
                     insiemeParole.add(w);
-                });
+            });
         });
         
         return insiemeParole;
@@ -96,43 +98,71 @@ public class Alunno {
         MappaParoleMultiple mappaParole = leggiMappaParole();
         
         String frase = "";
+        String input = "";
+        int aCapo = 0;
         
-        for(String parola: elencoParole){
-            String input = new String();
+        String parola = "";
+        
+        for(int indice = 0; indice < elencoParole.size() && !esci(input); indice++){
+            aCapo++;
+            
+            parola = elencoParole.get(indice);
             
             frase = String.format("%s %s", frase, parola);
             
-            do {
-                stampaInput(frase, parola);
-                input = new BufferedReader(new InputStreamReader(System.in)).readLine();
-                input = input.toUpperCase();
-            } while (inputOk(input));
+            if (aCapo % 15 == 0)
+                frase += "\n";
             
-            if (!skipInput(input))
+            do {
+                stampaInput(frase, parola, indice, elencoParole.size());
+                input = prendiDaConsole();
+            } while (!inputOk(input));
+            
+            if (!successivo(input) && !salta(input))
                 mappaParole.put(parola, input);
-        }
+            
+            if (salta(input))
+                indice = raccogliIndice(input, indice, elencoParole.size());
+        };
         
         return mappaParole;
     }
     
+    private boolean esci(String input){
+        if (input.equalsIgnoreCase(""))
+            return false;
+        
+        return input.equalsIgnoreCase(TASTO_ESCI);
+    }
+    
+    private boolean salta(String input){
+        Matcher m = Pattern.compile(TASTO_SALTA + "\\d+").matcher(input);
+        
+        return m.matches();
+    }
+    
+    private String prendiDaConsole() throws IOException {
+        return (new BufferedReader(new InputStreamReader(System.in)).readLine()).toUpperCase();
+    }
+    
     private boolean inputOk(String input) {
-        return (!input.isEmpty() && !skipInput(input) && !TipoParola.accetta(input));
+        return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || TipoParola.accetta(input)));
     }
     
-    private boolean skipInput(String input){
-        return input.equalsIgnoreCase("X");
+    private boolean successivo(String input){
+        return input.equalsIgnoreCase(TASTO_SUCCESSIVO) || esci(input);
     }
     
-    private void stampaInput(String frase, String parola) {
+    private void stampaInput(String frase, String parola, int corrente, int numeroTotale) {
         stampaManuale();
         
-        System.out.printf("%s\n%s -> ", frase, parola);
+        System.out.printf("%s\n[%d/%d] %s -> ", frase, corrente, numeroTotale, parola);
     }
 
     private void stampaManuale() {
         System.out.printf("Specificare:\n");
         
-        Arrays.stream(TipoParola.values()).forEach(wt -> System.out.printf("%s -> %s\n", wt, wt.sigla()));
+        Arrays.stream(TipoParola.values()).forEach(tp -> System.out.printf("%s -> %s\n", tp, tp.sigla()));
     }
 
     private void salvaProprieta(MappaParoleMultiple mappaParole) throws FileNotFoundException, IOException {
@@ -170,5 +200,14 @@ public class Alunno {
         });
         
         return mappaParole;
+    }
+
+    private int raccogliIndice(String input, int corrente, int dimensioneMassima) {
+        if (!salta(input))
+            return corrente;
+        
+        int salto = Integer.valueOf(input.replace(TASTO_SALTA, ""));
+        
+        return salto < dimensioneMassima ? salto : dimensioneMassima;
     }
 }

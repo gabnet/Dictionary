@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -107,12 +106,21 @@ public class Alunno {
                 stampaInput(frase, parola);
                 input = new BufferedReader(new InputStreamReader(System.in)).readLine();
                 input = input.toUpperCase();
-            } while (!input.isEmpty() && !TipoParola.accetta(input));
+            } while (inputOk(input));
             
-            mappaParole.put(parola, input);
+            if (!skipInput(input))
+                mappaParole.put(parola, input);
         }
         
         return mappaParole;
+    }
+    
+    private boolean inputOk(String input) {
+        return (!input.isEmpty() && !skipInput(input) && !TipoParola.accetta(input));
+    }
+    
+    private boolean skipInput(String input){
+        return input.equalsIgnoreCase("X");
     }
     
     private void stampaInput(String frase, String parola) {

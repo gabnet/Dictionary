@@ -31,6 +31,10 @@ public class Alunno {
     private final String inputFile;
     private final String mappaParoleFile = "text\\dizionario.properties";
     
+    private String frase = "";
+    private String input = "";
+    private String parola = "";
+    
     private final String TASTO_ESCI = "Q";
     private final String TASTO_SUCCESSIVO = "X";
     private final String TASTO_SALTA = "J";
@@ -96,25 +100,15 @@ public class Alunno {
 
     private MappaParoleMultiple calcolaMappaParole(ArrayList<String> elencoParole) throws IOException {
         MappaParoleMultiple mappaParole = leggiMappaParole();
-        
-        String frase = "";
-        String input = "";
-        int aCapo = 0;
-        
-        String parola = "";
+
+        input = "";
         
         for(int indice = 0; indice < elencoParole.size() && !esci(input); indice++){
-            aCapo++;
             
             parola = elencoParole.get(indice);
             
-            frase = String.format("%s %s", frase, parola);
-            
-            if (aCapo % 15 == 0)
-                frase += "\n";
-            
             do {
-                stampaInput(frase, parola, indice, elencoParole.size());
+                stampaInput(parola, indice, elencoParole.size());
                 input = prendiDaConsole();
             } while (!inputOk(input));
             
@@ -123,7 +117,7 @@ public class Alunno {
             
             if (salta(input))
                 indice = raccogliIndice(input, indice, elencoParole.size());
-        };
+        }
         
         return mappaParole;
     }
@@ -153,8 +147,13 @@ public class Alunno {
         return input.equalsIgnoreCase(TASTO_SUCCESSIVO) || esci(input);
     }
     
-    private void stampaInput(String frase, String parola, int corrente, int numeroTotale) {
+    private void stampaInput(String parola, int corrente, int numeroTotale) {
         stampaManuale();
+        
+        frase = String.format("%s %s", frase, parola);
+            
+        if (corrente % 15 == 0)
+            frase += "\n";
         
         System.out.printf("%s\n[%d/%d] %s -> ", frase, corrente, numeroTotale, parola);
     }

@@ -6,18 +6,11 @@
 package dictionary;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,22 +32,31 @@ public class Alunno {
     private final String TASTO_SUCCESSIVO = "X";
     private final String TASTO_SALTA = "J";
     
-    Alunno(String inputFile) {
+    private final GestoreFile gestoreFile;
+    private final Motore motore;
+    
+    Alunno(String inputFile, GestoreFile gestoreFile, Motore motore) {
         this.inputFile = inputFile;
+        this.gestoreFile = gestoreFile;
+        this.motore = motore;
     }
 
     public int apprendi() {
 
         try {        
-            BufferedReader lettore = leggiFile(inputFile);
+            BufferedReader lettoreParole = gestoreFile.leggiFile(inputFile);
             
-            List<String> linee = leggiLinee(lettore);
+            ArrayList<String> elencoParole = motore.leggiParole(lettoreParole);
+
+            FileReader lettoreMappa = gestoreFile.raccogliFileInput(mappaParoleFile);
             
-            ArrayList<String> elencoParole = leggiParole(linee);
+            MappaParoleMultiple mappaParole = motore.caricaMappa(lettoreMappa);
+            
+            mappaParole = aggiornaMappaParole(elencoParole, mappaParole);
 
-            MappaParoleMultiple mappaParole = calcolaMappaParole(elencoParole);
-
-            salvaProprieta(mappaParole);
+            Properties proprietaParole = motore.creaProprieta(mappaParole);
+            
+            gestoreFile.scriviFile(proprietaParole, mappaParoleFile);
         } catch (Exception ex) {
             return -1;
         }
@@ -62,45 +64,7 @@ public class Alunno {
         return 0;
     }
 
-    private BufferedReader leggiFile(String inputFile) throws FileNotFoundException {
-        if (!Files.exists(Paths.get(inputFile)))
-            throw new FileNotFoundException(String.format("File: %s", inputFile));
-            
-        return new BufferedReader(new FileReader(new File(inputFile)));
-    }
-
-    private List<String> leggiLinee(BufferedReader reader) {
-        List<String> linee = new ArrayList<>();
-        
-        reader.lines().forEach(linea -> linee.add(linea));
-        
-        return linee;
-    }
-
-    private ArrayList<String> leggiParole(List<String> linee) {
-        
-        ArrayList<String> insiemeParole = new ArrayList<>();
-        
-        linee.stream().forEach(l -> {
-            l = ripulisciLinea(l);
-            
-            Arrays.stream(l.split(" ")).forEach(w -> {
-                w = w.trim();
-                if (!w.equals(" ") && !w.isEmpty())
-                    insiemeParole.add(w);
-            });
-        });
-        
-        return insiemeParole;
-    }
-
-    private String ripulisciLinea(String linea) {
-        return linea.replace(",", "").replace(";", "").replace(".", "").replace("'", "");
-    }
-
-    private MappaParoleMultiple calcolaMappaParole(ArrayList<String> elencoParole) throws IOException {
-        MappaParoleMultiple mappaParole = leggiMappaParole();
-
+    private MappaParoleMultiple aggiornaMappaParole(ArrayList<String> elencoParole, MappaParoleMultiple mappaParole) throws IOException {
         input = "";
         
         for(int indice = 0; indice < elencoParole.size() && !esci(input); indice++){
@@ -162,43 +126,6 @@ public class Alunno {
         System.out.printf("Specificare:\n");
         
         Arrays.stream(TipoParola.values()).forEach(tp -> System.out.printf("%s -> %s\n", tp, tp.sigla()));
-    }
-
-    private void salvaProprieta(MappaParoleMultiple mappaParole) throws FileNotFoundException, IOException {
-        Properties proprieta = calcolaProprieta(mappaParole);
-        
-        scriviFile(proprieta);
-    }
-
-    private Properties calcolaProprieta(MappaParoleMultiple mappaParole) {
-        Properties proprieta = new Properties();
-        
-        mappaParole.keySet().stream().forEach(chiave -> proprieta.setProperty(chiave, mappaParole.get(chiave).toString()));
-        
-        return proprieta;
-    }
-
-    private void scriviFile(Properties proprieta) throws FileNotFoundException, IOException {
-        proprieta.store(new FileOutputStream(new File(mappaParoleFile)), "Dizionario parole");
-    }
-
-    private MappaParoleMultiple leggiMappaParole() throws IOException {
-        Properties proprieta = new Properties();
-        
-        proprieta.load(new FileInputStream(new File(mappaParoleFile)));
-        
-        return caricaMappaParole(proprieta);
-    }
-
-    private MappaParoleMultiple caricaMappaParole(Properties proprieta) {
-        MappaParoleMultiple mappaParole = new MappaParoleMultiple();
-        
-        proprieta.entrySet().stream().forEach(p -> {
-            TipoParolaSet valore = new TipoParolaSet(p.getValue().toString());
-            mappaParole.put(p.getKey().toString(), valore);
-        });
-        
-        return mappaParole;
     }
 
     private int raccogliIndice(String input, int corrente, int dimensioneMassima) {

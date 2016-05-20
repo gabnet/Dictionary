@@ -18,13 +18,15 @@ public class Dictionary {
         
         int returnValue = -1;
         
+        GestoreFile gestore = new GestoreFile();
+        
         if (args.length == 0)
             System.out.printf("Scegliere -anALISI o -apPRENDIMENTO\n");
         
         if ("-an".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
             returnValue = startAnalisi(args[1]);
         else if ("-ap".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
-                returnValue = startApprendimento(args[1]);
+                returnValue = startApprendimento(args[1], gestore);
         else
             System.out.printf("Scegliere -anALISI o -apPRENDIMENTO\n");
         
@@ -37,12 +39,9 @@ public class Dictionary {
         return a.analizza();
     }
 
-    private static int startApprendimento(String file) {
-        Alunno a = new Alunno(file);
+    private static int startApprendimento(String file, GestoreFile gestore) {
+        Alunno a = new Alunno(file, gestore);
         
         return a.apprendi();
     }
-    
-    
-    
 }

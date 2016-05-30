@@ -5,15 +5,9 @@
  */
 package dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -28,35 +22,26 @@ public class Alunno {
     private String input = "";
     private String parola = "";
     
-    private final String TASTO_ESCI = "Q";
-    private final String TASTO_SUCCESSIVO = "X";
-    private final String TASTO_SALTA = "J";
+    private final GestoreParole gestoreParole;
+    private final Consolle consolle;
     
-    private final GestoreFile gestoreFile;
-    private final Motore motore;
-    
-    Alunno(String inputFile, GestoreFile gestoreFile, Motore motore) {
+    public Alunno(String inputFile, GestoreFile gestoreFile, GestoreParole gestoreParole, Consolle consolle) {
         this.inputFile = inputFile;
-        this.gestoreFile = gestoreFile;
-        this.motore = motore;
+        this.gestoreParole = gestoreParole;
+        this.consolle = consolle;
     }
 
     public int apprendi() {
 
         try {        
-            BufferedReader lettoreParole = gestoreFile.leggiFile(inputFile);
-            
-            ArrayList<String> elencoParole = motore.leggiParole(lettoreParole);
+            ArrayList<String> elencoParole = gestoreParole.leggiParole(inputFile);
 
-            FileReader lettoreMappa = gestoreFile.raccogliFileInput(mappaParoleFile);
-            
-            MappaParoleMultiple mappaParole = motore.caricaMappa(lettoreMappa);
+            MappaParoleMultiple mappaParole = gestoreParole.caricaMappa(mappaParoleFile);
             
             mappaParole = aggiornaMappaParole(elencoParole, mappaParole);
 
-            Properties proprietaParole = motore.creaProprieta(mappaParole);
+            gestoreParole.salvaMappa(mappaParole, mappaParoleFile);
             
-            gestoreFile.scriviFile(proprietaParole, mappaParoleFile);
         } catch (Exception ex) {
             return -1;
         }
@@ -67,48 +52,23 @@ public class Alunno {
     private MappaParoleMultiple aggiornaMappaParole(ArrayList<String> elencoParole, MappaParoleMultiple mappaParole) throws IOException {
         input = "";
         
-        for(int indice = 0; indice < elencoParole.size() && !esci(input); indice++){
+        for(int indice = 0; indice < elencoParole.size() && !consolle.esci(input); indice++){
             
             parola = elencoParole.get(indice);
             
             do {
                 stampaInput(parola, indice, elencoParole.size());
-                input = prendiDaConsole();
-            } while (!inputOk(input));
+                input = consolle.prendi();
+            } while (!consolle.inputOk(input));
             
-            if (!successivo(input) && !salta(input))
+            if (!consolle.successivo(input) && !consolle.salta(input))
                 mappaParole.put(parola, input);
             
-            if (salta(input))
+            if (consolle.salta(input))
                 indice = raccogliIndice(input, indice, elencoParole.size());
         }
         
         return mappaParole;
-    }
-    
-    private boolean esci(String input){
-        if (input.equalsIgnoreCase(""))
-            return false;
-        
-        return input.equalsIgnoreCase(TASTO_ESCI);
-    }
-    
-    private boolean salta(String input){
-        Matcher m = Pattern.compile(TASTO_SALTA + "\\d+").matcher(input);
-        
-        return m.matches();
-    }
-    
-    private String prendiDaConsole() throws IOException {
-        return (new BufferedReader(new InputStreamReader(System.in)).readLine()).toUpperCase();
-    }
-    
-    private boolean inputOk(String input) {
-        return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || TipoParola.accetta(input)));
-    }
-    
-    private boolean successivo(String input){
-        return input.equalsIgnoreCase(TASTO_SUCCESSIVO) || esci(input);
     }
     
     private void stampaInput(String parola, int corrente, int numeroTotale) {
@@ -129,10 +89,10 @@ public class Alunno {
     }
 
     private int raccogliIndice(String input, int corrente, int dimensioneMassima) {
-        if (!salta(input))
+        if (!consolle.salta(input))
             return corrente;
         
-        int salto = Integer.valueOf(input.replace(TASTO_SALTA, ""));
+        int salto = consolle.prendiSalto(input);
         
         return salto < dimensioneMassima ? salto : dimensioneMassima;
     }

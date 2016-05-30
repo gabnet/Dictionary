@@ -18,17 +18,19 @@ public class Dictionary {
         
         int returnValue = -1;
         
-        GestoreFile gestore = new GestoreFile();
+        GestoreFile gestoreFile = new GestoreFile();
+        GestoreParole gestoreParole = new GestoreParole(gestoreFile);
+        Consolle consolle = new Consolle();
         
         if (args.length == 0)
-            System.out.printf("Scegliere -anALISI o -apPRENDIMENTO\n");
+            System.out.printf("Scegliere -ANalisi o -APprendimento\n");
         
-        if ("-an".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
+        if ("-AN".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
             returnValue = startAnalisi(args[1]);
-        else if ("-ap".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
-                returnValue = startApprendimento(args[1], gestore);
+        else if ("-AP".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
+                returnValue = startApprendimento(args[1], gestoreFile, gestoreParole, consolle);
         else
-            System.out.printf("Scegliere -anALISI o -apPRENDIMENTO\n");
+            System.out.printf("Scegliere -ANalisi o -APprendimento\n");
         
         System.exit(returnValue);
     }
@@ -39,8 +41,8 @@ public class Dictionary {
         return a.analizza();
     }
 
-    private static int startApprendimento(String file, GestoreFile gestore) {
-        Alunno a = new Alunno(file, gestore);
+    private static int startApprendimento(String file, GestoreFile gestoreFile, GestoreParole gestoreParole, Consolle consolle) {
+        Alunno a = new Alunno(file, gestoreFile, gestoreParole, consolle);
         
         return a.apprendi();
     }

@@ -6,6 +6,7 @@
 package dictionary;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,11 +18,19 @@ import java.util.Properties;
  *
  * @author gorig
  */
-public class Motore {
+public class GestoreParole {
 
-    public ArrayList<String> leggiParole(BufferedReader lettore) {
+    private final GestoreFile gestoreFile;
+    
+    public GestoreParole(GestoreFile gestoreFile) {
+        this.gestoreFile = gestoreFile;
+    }
+    
+    public ArrayList<String> leggiParole(String inputFile) throws FileNotFoundException {
         
-        List<String> linee = leggiLinee(lettore);
+        BufferedReader lettoreParole = gestoreFile.leggiFile(inputFile);
+        
+        List<String> linee = leggiLinee(lettoreParole);
         
         ArrayList<String> insiemeParole = new ArrayList<>();
         
@@ -38,15 +47,24 @@ public class Motore {
         return insiemeParole;
     }
     
-    public MappaParoleMultiple caricaMappa(FileReader lettore) throws IOException {
+    public MappaParoleMultiple caricaMappa(String inputFile) throws IOException {
+        
+        FileReader lettoreMappa = gestoreFile.raccogliFileInput(inputFile);
+        
         Properties proprieta = new Properties();
         
-        proprieta.load(lettore);
+        proprieta.load(lettoreMappa);
         
         return caricaProprieta(proprieta);
     }
+
+    public void salvaMappa(MappaParoleMultiple mappaParole, String mappaParoleFile) throws IOException {
+        Properties proprietaParole = creaProprieta(mappaParole);
+            
+        gestoreFile.scriviFile(proprietaParole, mappaParoleFile);
+    }
     
-    public Properties creaProprieta(MappaParoleMultiple mappaParole) {
+    private Properties creaProprieta(MappaParoleMultiple mappaParole) {
         Properties proprieta = new Properties();
         
         mappaParole.keySet().stream().forEach(chiave -> proprieta.setProperty(chiave, mappaParole.get(chiave).toString()));

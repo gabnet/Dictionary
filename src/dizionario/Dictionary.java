@@ -3,7 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dictionary;
+package dizionario;
+
+import dizionario.utilita.Consolle;
+import dizionario.utilita.GestoreParole;
+import dizionario.utilita.GestoreFile;
 
 /**
  *
@@ -11,6 +15,9 @@ package dictionary;
  */
 public class Dictionary {
 
+    public static String mappaParoleFile = "text\\dizionario.properties";
+    public static String mappaVerbiFile = "text\\dizionarioVerbi.properties";
+    
     /**
      * @param args the command line arguments
      */
@@ -26,7 +33,7 @@ public class Dictionary {
             System.out.printf("Scegliere -ANalisi o -APprendimento\n");
         
         if ("-AN".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
-            returnValue = startAnalisi(args[1]);
+            returnValue = startAnalisi(args[1], gestoreParole);
         else if ("-AP".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
                 returnValue = startApprendimento(args[1], gestoreFile, gestoreParole, consolle);
         else
@@ -35,14 +42,14 @@ public class Dictionary {
         System.exit(returnValue);
     }
 
-    private static int startAnalisi(String file) {
-        Analizzatore a = new Analizzatore(file);
+    private static int startAnalisi(String file, GestoreParole gestoreParole) {
+        Analizzatore a = new Analizzatore(mappaParoleFile, mappaVerbiFile, file, gestoreParole);
         
-        return a.analizza();
+        return a.calcolaVerbi();
     }
 
     private static int startApprendimento(String file, GestoreFile gestoreFile, GestoreParole gestoreParole, Consolle consolle) {
-        Alunno a = new Alunno(file, gestoreFile, gestoreParole, consolle);
+        Alunno a = new Alunno(mappaParoleFile, file, gestoreParole, consolle);
         
         return a.apprendi();
     }

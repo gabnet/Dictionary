@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dictionary;
+package dizionario.utilita;
 
+import dizionario.modelli.MappaParoleMultiple;
+import dizionario.modelli.MappaVerbi;
+import dizionario.modelli.TipoParolaSet;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -47,7 +50,7 @@ public class GestoreParole {
         return insiemeParole;
     }
     
-    public MappaParoleMultiple caricaMappa(String inputFile) throws IOException {
+    public MappaParoleMultiple caricaMappaParoleMultiple(String inputFile) throws IOException{
         
         FileReader lettoreMappa = gestoreFile.raccogliFileInput(inputFile);
         
@@ -55,7 +58,29 @@ public class GestoreParole {
         
         proprieta.load(lettoreMappa);
         
-        return caricaProprieta(proprieta);
+        MappaParoleMultiple mappaParole = new MappaParoleMultiple();
+        
+        proprieta.entrySet().stream().forEach(p -> {
+            TipoParolaSet valore = new TipoParolaSet(p.getValue().toString());
+            mappaParole.put(p.getKey().toString(), valore);
+        });
+        
+        return mappaParole;
+    }
+    
+    public MappaVerbi caricaMappaVerbi(String inputFile) throws IOException{
+        
+        FileReader lettoreMappa = gestoreFile.raccogliFileInput(inputFile);
+        
+        Properties proprieta = new Properties();
+        
+        proprieta.load(lettoreMappa);
+        
+        MappaVerbi mappaVerbi = new MappaVerbi();
+        
+        //TODO: fill
+        
+        return mappaVerbi;
     }
 
     public void salvaMappa(MappaParoleMultiple mappaParole, String mappaParoleFile) throws IOException {
@@ -82,15 +107,5 @@ public class GestoreParole {
     
     private String ripulisciLinea(String linea) {
         return linea.replace(",", "").replace(";", "").replace(".", "").replace("'", "");
-    }
-        private MappaParoleMultiple caricaProprieta(Properties proprieta) {
-        MappaParoleMultiple mappaParole = new MappaParoleMultiple();
-        
-        proprieta.entrySet().stream().forEach(p -> {
-            TipoParolaSet valore = new TipoParolaSet(p.getValue().toString());
-            mappaParole.put(p.getKey().toString(), valore);
-        });
-        
-        return mappaParole;
     }
 }

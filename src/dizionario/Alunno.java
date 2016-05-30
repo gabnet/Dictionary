@@ -3,8 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dictionary;
+package dizionario;
 
+import dizionario.utilita.Consolle;
+import dizionario.utilita.GestoreParole;
+import dizionario.modelli.TipoParola;
+import dizionario.modelli.MappaParoleMultiple;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +20,7 @@ import java.util.Arrays;
 public class Alunno {
 
     private final String inputFile;
-    private final String mappaParoleFile = "text\\dizionario.properties";
+    private final String mappaParoleFile;
     
     private String frase = "";
     private String input = "";
@@ -25,7 +29,8 @@ public class Alunno {
     private final GestoreParole gestoreParole;
     private final Consolle consolle;
     
-    public Alunno(String inputFile, GestoreFile gestoreFile, GestoreParole gestoreParole, Consolle consolle) {
+    public Alunno(String mappaParoleFile, String inputFile, GestoreParole gestoreParole, Consolle consolle) {
+        this.mappaParoleFile = mappaParoleFile;
         this.inputFile = inputFile;
         this.gestoreParole = gestoreParole;
         this.consolle = consolle;
@@ -36,7 +41,7 @@ public class Alunno {
         try {        
             ArrayList<String> elencoParole = gestoreParole.leggiParole(inputFile);
 
-            MappaParoleMultiple mappaParole = gestoreParole.caricaMappa(mappaParoleFile);
+            MappaParoleMultiple mappaParole = gestoreParole.caricaMappaParoleMultiple(mappaParoleFile);
             
             mappaParole = aggiornaMappaParole(elencoParole, mappaParole);
 

@@ -45,7 +45,7 @@ public class Alunno {
             
             mappaParole = aggiornaMappaParole(elencoParole, mappaParole);
 
-            gestoreParole.salvaMappa(mappaParole, mappaParoleFile);
+            gestoreParole.salvaMappaParoleMultiple(mappaParole, mappaParoleFile);
             
         } catch (Exception ex) {
             return -1;
@@ -64,7 +64,7 @@ public class Alunno {
             do {
                 stampaInput(parola, indice, elencoParole.size());
                 input = consolle.prendi();
-            } while (!consolle.inputOk(input));
+            } while (!consolle.TipoParolaInputOk(input));
             
             if (!consolle.successivo(input) && !consolle.salta(input))
                 mappaParole.put(parola, input);

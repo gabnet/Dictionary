@@ -40,9 +40,9 @@ public class Analizzatore {
             
             elencoParole = filtraParoleNote(elencoParole, mappaParole);
             
-            mappaParole = inferisciVerbi(elencoParole, mappaParole);
+            mappaParole = inferisciVerbi(elencoParole, mappaVerbi);
             
-            gestoreParole.salvaMappa(mappaParole, mappaParoleFile);
+            gestoreParole.salvaMappaParoleMultiple(mappaParole, mappaParoleFile);
         } catch (Exception ex) {
             return -1;
         }
@@ -54,7 +54,7 @@ public class Analizzatore {
         return elencoParole.stream().filter(p -> mappaParole.containsKey(p)).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private MappaParoleMultiple inferisciVerbi(ArrayList<String> elencoParole, MappaParoleMultiple mappaParole) {
+    private MappaParoleMultiple inferisciVerbi(ArrayList<String> elencoParole, MappaVerbi mappaParole) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -14,6 +14,10 @@ public class Verbo {
     private String radice;
     private VerboSet verbiNoti;
     
+    public Verbo(String radice){
+        this.radice = radice;
+    }
+    
     @Override
     public String toString() {
         return String.format("%s; %s", radice, verbiNoti.toString());

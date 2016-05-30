@@ -83,16 +83,30 @@ public class GestoreParole {
         return mappaVerbi;
     }
 
-    public void salvaMappa(MappaParoleMultiple mappaParole, String mappaParoleFile) throws IOException {
-        Properties proprietaParole = creaProprieta(mappaParole);
+    public void salvaMappaParoleMultiple(MappaParoleMultiple mappaParole, String mappaParoleFile) throws IOException {
+        Properties proprietaParole = creaProprietaParoleMultiple(mappaParole);
             
         gestoreFile.scriviFile(proprietaParole, mappaParoleFile);
     }
     
-    private Properties creaProprieta(MappaParoleMultiple mappaParole) {
+    public void salvaMappaVerbi(MappaVerbi mappaVerbi, String mappaVerbiFile) throws IOException {
+        Properties proprietaParole = creaProprietaVerbi(mappaVerbi);
+            
+        gestoreFile.scriviFile(proprietaParole, mappaVerbiFile);
+    }
+    
+    private Properties creaProprietaParoleMultiple(MappaParoleMultiple mappaParole) {
         Properties proprieta = new Properties();
         
         mappaParole.keySet().stream().forEach(chiave -> proprieta.setProperty(chiave, mappaParole.get(chiave).toString()));
+        
+        return proprieta;
+    }
+    
+    private Properties creaProprietaVerbi(MappaVerbi mappaVerbi) {
+        Properties proprieta = new Properties();
+        
+        mappaVerbi.keySet().stream().forEach(chiave -> proprieta.setProperty(chiave, mappaVerbi.get(chiave).toString()));
         
         return proprieta;
     }

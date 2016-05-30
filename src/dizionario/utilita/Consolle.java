@@ -31,8 +31,12 @@ public class Consolle {
         return (new BufferedReader(new InputStreamReader(System.in)).readLine()).toUpperCase();
     }
     
-    public boolean inputOk(String input) {
+    public boolean TipoParolaInputOk(String input) {
         return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || TipoParola.accetta(input)));
+    }
+    
+    public boolean inputOk(String input) {
+        return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || parolaLibera()));
     }
     
     public boolean successivo(String input){
@@ -48,5 +52,9 @@ public class Consolle {
     
     public int prendiSalto(String input) {
         return Integer.valueOf(input.replace(TASTO_SALTA, ""));
+    }
+
+    private boolean parolaLibera() {
+        return true;
     }
 }

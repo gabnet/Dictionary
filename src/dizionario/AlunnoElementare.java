@@ -12,13 +12,12 @@ import dizionario.modelli.MappaParoleMultiple;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  *
  * @author gorig
  */
-public class Alunno {
+public class AlunnoElementare {
 
     private final String inputFile;
     private final String mappaParoleFile;
@@ -26,7 +25,7 @@ public class Alunno {
     private final GestoreParole gestoreParole;
     private final Consolle consolle;
     
-    public Alunno(String mappaParoleFile, String inputFile, GestoreParole gestoreParole, Consolle consolle) {
+    public AlunnoElementare(String mappaParoleFile, String inputFile, GestoreParole gestoreParole, Consolle consolle) {
         this.mappaParoleFile = mappaParoleFile;
         this.inputFile = inputFile;
         this.gestoreParole = gestoreParole;

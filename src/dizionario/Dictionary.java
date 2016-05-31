@@ -45,13 +45,13 @@ public class Dictionary {
     }
 
     private static int startAnalisi(String file, GestoreParole gestoreParole) {
-        Analizzatore a = new Analizzatore(mappaParoleFile, mappaVerbiFile, file, gestoreParole);
+        AlunnoLiceale a = new AlunnoLiceale(mappaParoleFile, mappaVerbiFile, file, gestoreParole);
         
         return a.calcolaVerbi();
     }
 
     private static int startApprendimento(String file, GestoreParole gestoreParole, Consolle consolle) {
-        Alunno a = new Alunno(mappaParoleFile, file, gestoreParole, consolle);
+        AlunnoElementare a = new AlunnoElementare(mappaParoleFile, file, gestoreParole, consolle);
         
         return a.apprendi();
     }

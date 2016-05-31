@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
  *
  * @author gorig
  */
-public class Analizzatore {
+public class AlunnoLiceale {
     
-    private String mappaParoleFile;
-    private String mappaVerbiFile;
-    private String inputFile;
-    private GestoreParole gestoreParole;
+    private final String mappaParoleFile;
+    private final String mappaVerbiFile;
+    private final String inputFile;
+    private final GestoreParole gestoreParole;
     
-    public Analizzatore(String mappaParoleFile, String mappaVerbiFile, String inputFile, GestoreParole gestoreParole){
+    public AlunnoLiceale(String mappaParoleFile, String mappaVerbiFile, String inputFile, GestoreParole gestoreParole){
         this.mappaParoleFile = mappaParoleFile;
         this.mappaVerbiFile = mappaVerbiFile;
         this.inputFile = inputFile;

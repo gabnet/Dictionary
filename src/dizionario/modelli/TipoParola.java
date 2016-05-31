@@ -18,7 +18,8 @@ public enum TipoParola {
     CONGIUNZIONE("C"),
     PREPOSIZIONE("PRE"),
     INTERIEZIONE("I"),
-    ARTICOLO("AR");
+    ARTICOLO("AR"),
+    SCONOSCIUTO("SC");
 
     private final String sigla;
     

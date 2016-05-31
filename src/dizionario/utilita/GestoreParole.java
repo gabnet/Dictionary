@@ -120,6 +120,6 @@ public class GestoreParole {
     }
     
     private String ripulisciLinea(String linea) {
-        return linea.replace(",", "").replace(";", "").replace(".", "").replace("'", "");
+        return linea.replace(",", " ").replace(";", " ").replace(".", " ").replace("'", " ").replace("’", " ");
     }
 }

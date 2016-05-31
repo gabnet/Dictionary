@@ -12,6 +12,7 @@ import dizionario.modelli.MappaParoleMultiple;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -21,10 +22,6 @@ public class Alunno {
 
     private final String inputFile;
     private final String mappaParoleFile;
-    
-    private String frase = "";
-    private String input = "";
-    private String parola = "";
     
     private final GestoreParole gestoreParole;
     private final Consolle consolle;
@@ -56,35 +53,37 @@ public class Alunno {
     }
 
     private MappaParoleMultiple aggiornaMappaParole(ArrayList<String> elencoParole, MappaParoleMultiple mappaParole) throws IOException {
-        input = "";
-        
+        String input = "";
+        String parola = "";
+        String frase = "";
+
         for(int indice = 0; indice < elencoParole.size() && !consolle.esci(input); indice++){
             
             parola = elencoParole.get(indice);
+
+                do {
+                    frase = tieniFrase(frase, parola, indice);
+                    stampaInput(frase, parola, indice, elencoParole.size());
+                    
+                    if (!nota(parola, mappaParole))
+                        input = consolle.prendi();
+                    else input = consolle.tastoSuccessivo();
+                } while (!consolle.TipoParolaInputOk(input));
+
+                if (!consolle.successivo(input) && !consolle.salta(input))
+                    mappaParole.put(parola, input);
+
+                if (consolle.salta(input))
+                    indice = raccogliIndice(input, indice, elencoParole.size());
             
-            do {
-                stampaInput(parola, indice, elencoParole.size());
-                input = consolle.prendi();
-            } while (!consolle.TipoParolaInputOk(input));
-            
-            if (!consolle.successivo(input) && !consolle.salta(input))
-                mappaParole.put(parola, input);
-            
-            if (consolle.salta(input))
-                indice = raccogliIndice(input, indice, elencoParole.size());
         }
         
         return mappaParole;
     }
     
-    private void stampaInput(String parola, int corrente, int numeroTotale) {
+    private void stampaInput(String frase, String parola, int corrente, int numeroTotale) {
         stampaManuale();
-        
-        frase = String.format("%s %s", frase, parola);
-            
-        if (corrente % 15 == 0)
-            frase += "\n";
-        
+
         System.out.printf("%s\n[%d/%d] %s -> ", frase, corrente, numeroTotale, parola);
     }
 
@@ -101,5 +100,19 @@ public class Alunno {
         int salto = consolle.prendiSalto(input);
         
         return salto < dimensioneMassima ? salto : dimensioneMassima;
+    }
+
+    private boolean nota(String parola, MappaParoleMultiple mappaParole) {
+        return mappaParole.contiene(parola);
+    }
+
+    private String tieniFrase(String frase, String parola, int corrente) {
+                
+        frase = String.format("%s %s", frase, parola);
+            
+        if (corrente % 15 == 0)
+            frase += "\n";
+        
+        return frase;
     }
 }

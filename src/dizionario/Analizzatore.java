@@ -52,7 +52,7 @@ public class Analizzatore {
     }
 
     private ArrayList<String> filtraParoleNote(ArrayList<String> elencoParole, MappaParoleMultiple mappaParole) {
-        return elencoParole.stream().filter(p -> mappaParole.containsKey(p)).collect(Collectors.toCollection(ArrayList::new));
+        return elencoParole.stream().filter(p -> mappaParole.contiene(p)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private MappaParoleMultiple inferisciVerbi(ArrayList<String> elencoParole, MappaVerbi mappaParole) {

@@ -53,6 +53,10 @@ public class Consolle {
     public int prendiSalto(String input) {
         return Integer.valueOf(input.replace(TASTO_SALTA, ""));
     }
+    
+    public String tastoSuccessivo(){
+        return TASTO_SUCCESSIVO;
+    }
 
     private boolean parolaLibera() {
         return true;

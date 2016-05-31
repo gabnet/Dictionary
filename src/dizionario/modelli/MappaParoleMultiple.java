@@ -15,6 +15,9 @@ public class MappaParoleMultiple extends HashMap<String, TipoParolaSet> {
     
     public void put(String chiave, String sigla) {
         
+        chiave = chiave.toLowerCase();
+        sigla = sigla.toLowerCase();
+        
         TipoParolaSet presente = get(chiave);
         
         if (presente == null)
@@ -23,5 +26,11 @@ public class MappaParoleMultiple extends HashMap<String, TipoParolaSet> {
             presente.add(TipoParola.valoreDiSigla(sigla));
         
         put(chiave, presente);
+    }
+    
+    public boolean contiene(String key) {
+        key = key.toLowerCase();
+        
+        return containsKey(key);
     }
 }

@@ -33,7 +33,7 @@ public class Dictionary {
             System.out.printf("Scegliere -ANalisi o -APprendimento o -RIassunto\n");
         
         if ("-AN".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
-            returnValue = startAnalisi(args[1], gestoreParole);
+            returnValue = startAnalisi(args[1], gestoreParole, consolle);
         else if ("-AP".equalsIgnoreCase(args[0]) && !args[1].isEmpty())
                 returnValue = startApprendimento(args[1], gestoreParole, consolle);
         else if ("-RI".equalsIgnoreCase(args[0]))
@@ -44,8 +44,8 @@ public class Dictionary {
         System.exit(returnValue);
     }
 
-    private static int startAnalisi(String file, GestoreParole gestoreParole) {
-        AlunnoLiceale a = new AlunnoLiceale(mappaParoleFile, mappaVerbiFile, file, gestoreParole);
+    private static int startAnalisi(String file, GestoreParole gestoreParole, Consolle consolle) {
+        AlunnoLiceale a = new AlunnoLiceale(mappaParoleFile, mappaVerbiFile, file, gestoreParole, consolle);
         
         return a.calcolaVerbi();
     }

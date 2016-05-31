@@ -5,7 +5,7 @@
  */
 package dizionario.utilita;
 
-import dizionario.modelli.TipoParola;
+import dizionario.modelli.parole.GuardianoDelleParole;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +20,7 @@ public class Consolle {
     private final String TASTO_ESCI = "E";
     private final String TASTO_SUCCESSIVO = "SU";
     private final String TASTO_SALTA = "SA";
+    private final String CONFERMATO = "S";
     
     public boolean salta(String input){
         Matcher m = Pattern.compile(TASTO_SALTA + "\\d+").matcher(input);
@@ -31,12 +32,16 @@ public class Consolle {
         return (new BufferedReader(new InputStreamReader(System.in)).readLine()).toUpperCase();
     }
     
-    public boolean TipoParolaInputOk(String input) {
-        return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || TipoParola.accetta(input)));
+    public boolean tipoParolaInputOk(String input) {
+        return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || GuardianoDelleParole.accetta(input)));
     }
     
     public boolean inputOk(String input) {
         return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || parolaLibera()));
+    }
+    
+    public boolean inputOkVerbi(String input) {
+        return ((input != null) && !("".equals(input)) && (successivo(input) || salta(input) || GuardianoDelleParole.accettaVerbi(input)));
     }
     
     public boolean successivo(String input){
@@ -60,5 +65,14 @@ public class Consolle {
 
     private boolean parolaLibera() {
         return true;
+    }
+
+    public boolean confermato() throws IOException {
+        String input = prendi();
+        return ((input != null) && !("".equals(input)) && confermato(input));
+    }
+
+    private boolean confermato(String input) {
+        return input.equalsIgnoreCase(CONFERMATO);
     }
 }

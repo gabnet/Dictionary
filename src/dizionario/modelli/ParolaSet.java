@@ -5,7 +5,8 @@
  */
 package dizionario.modelli;
 
-import java.util.ArrayList;
+import dizionario.modelli.parole.GuardianoDelleParole;
+import dizionario.modelli.parole.Parola;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -13,9 +14,9 @@ import java.util.HashSet;
  *
  * @author gorig
  */
-public class TipoParolaSet extends HashSet<TipoParola> {
+public class ParolaSet extends HashSet<Parola> {
     
-    public TipoParolaSet(String valore){
+    public ParolaSet(String valore){
         if (valore.contains(","))
             Arrays.stream(valore.split(",")).forEach(v -> aggiungiAllInsieme(v) );
         else
@@ -24,13 +25,13 @@ public class TipoParolaSet extends HashSet<TipoParola> {
     
     @Override
     public String toString(){
-        return this.stream().map(tp -> tp.sigla()).reduce("", (output, tp) -> output = String.format("%s, %s", output, tp)).replaceFirst(", ", "");
+        return this.stream().map(tp -> tp.sigla().toString()).reduce("", (output, tp) -> output = String.format("%s, %s", output, tp)).replaceFirst(", ", "");
     }
     
     private void aggiungiAllInsieme(String sigla) {
         sigla = sigla.trim();
         
-        if (TipoParola.accetta(sigla))
-            this.add(TipoParola.valoreDiSigla(sigla));
+        if (GuardianoDelleParole.accetta(sigla))
+            this.add(GuardianoDelleParole.parolaPerSigla(sigla));
     }
 }

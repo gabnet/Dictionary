@@ -3,21 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dizionario.modelli;
+package dizionario.utilita.verbi;
+
+import dizionario.modelli.MappaVerbi;
+import dizionario.modelli.Verbo;
 
 /**
  *
  * @author gorig
  */
-public enum TipoParola {
-    SOSTANTIVO,
-    VERBO,
-    AGGETTIVO,
-    AVVERBIO,
-    PRONOME,
-    CONGIUNZIONE,
-    PREPOSIZIONE,
-    INTERIEZIONE,
-    ARTICOLO,
-    SCONOSCIUTO;
+public interface IAnello {
+    
+    public Verbo proponi(String input, MappaVerbi mappaVerbi);
 }

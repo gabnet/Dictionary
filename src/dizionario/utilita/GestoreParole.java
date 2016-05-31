@@ -7,7 +7,7 @@ package dizionario.utilita;
 
 import dizionario.modelli.MappaParoleMultiple;
 import dizionario.modelli.MappaVerbi;
-import dizionario.modelli.TipoParolaSet;
+import dizionario.modelli.ParolaSet;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -61,7 +61,7 @@ public class GestoreParole {
         MappaParoleMultiple mappaParole = new MappaParoleMultiple();
         
         proprieta.entrySet().stream().forEach(p -> {
-            TipoParolaSet valore = new TipoParolaSet(p.getValue().toString());
+            ParolaSet valore = new ParolaSet(p.getValue().toString());
             mappaParole.put(p.getKey().toString(), valore);
         });
         

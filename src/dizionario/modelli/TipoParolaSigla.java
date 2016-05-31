@@ -9,15 +9,14 @@ package dizionario.modelli;
  *
  * @author gorig
  */
-public enum TipoParola {
-    SOSTANTIVO,
-    VERBO,
-    AGGETTIVO,
-    AVVERBIO,
-    PRONOME,
-    CONGIUNZIONE,
-    PREPOSIZIONE,
-    INTERIEZIONE,
-    ARTICOLO,
-    SCONOSCIUTO;
+public enum TipoParolaSigla {
+    S,
+    V,
+    AG,
+    AV,
+    PRO,
+    C,
+    I,
+    AR,
+    SC;
 }

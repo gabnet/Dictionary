@@ -7,11 +7,10 @@ package dizionario;
 
 import dizionario.utilita.Consolle;
 import dizionario.utilita.GestoreParole;
-import dizionario.modelli.TipoParola;
 import dizionario.modelli.MappaParoleMultiple;
+import dizionario.modelli.parole.GuardianoDelleParole;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
@@ -67,7 +66,7 @@ public class AlunnoElementare {
                     if (!nota(parola, mappaParole))
                         input = consolle.prendi();
                     else input = consolle.tastoSuccessivo();
-                } while (!consolle.TipoParolaInputOk(input));
+                } while (!consolle.tipoParolaInputOk(input));
 
                 if (!consolle.successivo(input) && !consolle.salta(input))
                     mappaParole.put(parola, input);
@@ -89,7 +88,7 @@ public class AlunnoElementare {
     private void stampaManuale() {
         System.out.printf("Specificare:\n");
         
-        Arrays.stream(TipoParola.values()).forEach(tp -> System.out.printf("%s -> %s\n", tp, tp.sigla()));
+        GuardianoDelleParole.parole().forEach(tp -> System.out.printf("%s -> %s\n", tp, tp.sigla()));
     }
 
     private int raccogliIndice(String input, int corrente, int dimensioneMassima) {

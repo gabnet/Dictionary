@@ -9,6 +9,7 @@ import dizionario.modelli.MappaParoleMultiple;
 import dizionario.modelli.MappaVerbi;
 import dizionario.modelli.TipoParola;
 import dizionario.modelli.Verbo;
+import dizionario.modelli.parole.Parola;
 import dizionario.utilita.Consolle;
 import dizionario.utilita.GestoreParole;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class Bidello {
     }
 
     private ArrayList<String> filtraVerbi(MappaParoleMultiple mappaParole) {
-        return mappaParole.keySet().stream().filter(k -> ((HashSet<TipoParola>)mappaParole.get(k)).contains(TipoParola.VERBO)).collect(Collectors.toCollection(ArrayList::new));
+        return mappaParole.keySet().stream().filter(k -> ((HashSet<Parola>)mappaParole.get(k)).contains(TipoParola.VERBO)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     private MappaVerbi imparaVerbi(ArrayList<String> verbi, MappaVerbi mappaVerbi) throws IOException {
@@ -81,7 +82,7 @@ public class Bidello {
             } while (!consolle.inputOk(inputInfinito) && !consolle.inputOk(inputRadice));
             
             if (!consolle.successivo(inputInfinito) && !consolle.salta(inputInfinito) && !consolle.successivo(inputRadice) && !consolle.salta(inputRadice))
-                mappaVerbi.put(inputInfinito, new Verbo(inputRadice));
+                mappaVerbi.put(inputInfinito, new Verbo(inputInfinito, inputRadice));
             
         }
         

@@ -5,25 +5,26 @@
  */
 package dizionario.modelli;
 
+import dizionario.modelli.parole.GuardianoDelleParole;
 import java.util.HashMap;
 
 /**
  *
  * @author gorig
  */
-public class MappaParoleMultiple extends HashMap<String, TipoParolaSet> {
+public class MappaParoleMultiple extends HashMap<String, ParolaSet> {
     
     public void put(String chiave, String sigla) {
         
         chiave = chiave.toLowerCase();
         sigla = sigla.toLowerCase();
         
-        TipoParolaSet presente = get(chiave);
+        ParolaSet presente = get(chiave);
         
         if (presente == null)
-            presente = new TipoParolaSet(sigla);
+            presente = new ParolaSet(sigla);
         else
-            presente.add(TipoParola.valoreDiSigla(sigla));
+            presente.add(GuardianoDelleParole.parolaPerSigla(sigla));
         
         put(chiave, presente);
     }

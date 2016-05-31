@@ -16,10 +16,15 @@ public class Verbo {
     
     public Verbo(String radice){
         this.radice = radice;
+        this.verbiNoti = new VerboSet();
     }
     
     @Override
     public String toString() {
         return String.format("%s; %s", radice, verbiNoti.toString());
+    }
+    
+    public boolean coniugatoIn(String verbo) {
+        return verbiNoti.contains(verbo);
     }
 }

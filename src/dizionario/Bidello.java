@@ -44,11 +44,14 @@ public class Bidello {
 
             ArrayList<String> verbi = filtraVerbi(mappaParole);
             
-            MappaVerbi mappaVerbi = imparaVerbi(verbi);
+            MappaVerbi mappaVerbi = gestoreParole.caricaMappaVerbi(mappaVerbiFile);
+            
+            mappaVerbi = imparaVerbi(verbi, mappaVerbi);
             
             gestoreParole.salvaMappaVerbi(mappaVerbi, mappaVerbiFile);
 
         } catch (Exception ex) {
+            System.err.printf("Errore! %s", ex.getMessage());
             return -1;
         }
         
@@ -59,8 +62,7 @@ public class Bidello {
         return mappaParole.keySet().stream().filter(k -> ((HashSet<TipoParola>)mappaParole.get(k)).contains(TipoParola.VERBO)).collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private MappaVerbi imparaVerbi(ArrayList<String> verbi) throws IOException {
-        MappaVerbi mappaVerbi = new MappaVerbi();
+    private MappaVerbi imparaVerbi(ArrayList<String> verbi, MappaVerbi mappaVerbi) throws IOException {
         inputInfinito = "";
         inputRadice = "";
         
@@ -71,9 +73,11 @@ public class Bidello {
             
                 inputInfinito = consolle.prendi();
 
-                stampaInputRadice(verbi.get(indice), indice + 1, verbi.size());
+                if (!consolle.successivo(inputInfinito)) {
+                    stampaInputRadice(verbi.get(indice), indice + 1, verbi.size());
 
-                inputRadice = consolle.prendi();
+                    inputRadice = consolle.prendi();
+                }
             } while (!consolle.inputOk(inputInfinito) && !consolle.inputOk(inputRadice));
             
             if (!consolle.successivo(inputInfinito) && !consolle.salta(inputInfinito) && !consolle.successivo(inputRadice) && !consolle.salta(inputRadice))

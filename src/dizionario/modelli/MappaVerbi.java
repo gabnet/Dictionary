@@ -13,4 +13,7 @@ import java.util.HashMap;
  */
 public class MappaVerbi extends HashMap<String, Verbo>{
 
+    public boolean contiene(String verbo){
+        return values().stream().anyMatch(v -> v.coniugatoIn(verbo));
+    }
 }

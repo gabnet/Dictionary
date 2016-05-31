@@ -48,6 +48,7 @@ public class Alunno {
             gestoreParole.salvaMappaParoleMultiple(mappaParole, mappaParoleFile);
             
         } catch (Exception ex) {
+            System.err.printf("Errore! %s", ex.getMessage());
             return -1;
         }
         

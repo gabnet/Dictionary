@@ -12,6 +12,7 @@ import dizionario.modelli.Verbo;
 import dizionario.modelli.parole.Parola;
 import dizionario.utilita.Consolle;
 import dizionario.utilita.GestoreParole;
+import dizionario.utilita.Stampante;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -70,12 +71,12 @@ public class Bidello {
         for(int indice = 0; indice < verbi.size() && !consolle.esci(inputInfinito) && !consolle.esci(inputRadice); indice++){
             
             do {
-                stampaInputInfinito(verbi.get(indice), indice + 1, verbi.size());
+                Stampante.stampaInputInfinito(verbi.get(indice), indice + 1, verbi.size());
             
                 inputInfinito = consolle.prendi();
 
                 if (!consolle.successivo(inputInfinito)) {
-                    stampaInputRadice(verbi.get(indice), indice + 1, verbi.size());
+                    Stampante.stampaInputRadice(verbi.get(indice), indice + 1, verbi.size());
 
                     inputRadice = consolle.prendi();
                 }
@@ -83,17 +84,8 @@ public class Bidello {
             
             if (!consolle.successivo(inputInfinito) && !consolle.salta(inputInfinito) && !consolle.successivo(inputRadice) && !consolle.salta(inputRadice))
                 mappaVerbi.put(inputInfinito, new Verbo(inputInfinito, inputRadice));
-            
         }
         
         return mappaVerbi;
-    }
-    
-    private void stampaInputInfinito(String parola, int corrente, int numeroTotale) {
-        System.out.printf("\n[%d/%d] %s --infinito-> ", corrente, numeroTotale, parola);
-    }
-    
-    private void stampaInputRadice(String parola, int corrente, int numeroTotale) {
-        System.out.printf("\n[%d/%d] %s --radice-> ", corrente, numeroTotale, parola);
     }
 }

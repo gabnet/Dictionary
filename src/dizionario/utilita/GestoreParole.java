@@ -8,6 +8,7 @@ package dizionario.utilita;
 import dizionario.modelli.MappaParoleMultiple;
 import dizionario.modelli.MappaVerbi;
 import dizionario.modelli.ParolaSet;
+import dizionario.modelli.Verbo;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -78,7 +79,10 @@ public class GestoreParole {
         
         MappaVerbi mappaVerbi = new MappaVerbi();
         
-        //TODO: fill
+        proprieta.entrySet().forEach(v -> {
+            Verbo verbo = new Verbo(v.getKey().toString(), v.getValue().toString());
+            mappaVerbi.put(v.getKey().toString(), verbo);
+        });
         
         return mappaVerbi;
     }

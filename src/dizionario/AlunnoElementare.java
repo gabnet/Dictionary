@@ -9,6 +9,7 @@ import dizionario.utilita.Consolle;
 import dizionario.utilita.GestoreParole;
 import dizionario.modelli.MappaParoleMultiple;
 import dizionario.modelli.parole.GuardianoDelleParole;
+import dizionario.utilita.Stampante;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -60,10 +61,10 @@ public class AlunnoElementare {
             parola = elencoParole.get(indice);
 
                 do {
-                    frase = tieniFrase(frase, parola, indice);
-                    stampaInput(frase, parola, indice, elencoParole.size());
+                    frase = Stampante.tieniFrase(frase, parola, indice);
+                    Stampante.stampaInput(frase, parola, indice, elencoParole.size());
                     
-                    if (!nota(parola, mappaParole))
+                    if (!Stampante.nota(parola, mappaParole))
                         input = consolle.prendi();
                     else input = consolle.tastoSuccessivo();
                 } while (!consolle.tipoParolaInputOk(input));
@@ -72,45 +73,9 @@ public class AlunnoElementare {
                     mappaParole.put(parola, input);
 
                 if (consolle.salta(input))
-                    indice = raccogliIndice(input, indice, elencoParole.size());
-            
+                    indice = Stampante.raccogliIndice(input, indice, elencoParole.size(), consolle);
         }
         
         return mappaParole;
-    }
-    
-    private void stampaInput(String frase, String parola, int corrente, int numeroTotale) {
-        stampaManuale();
-
-        System.out.printf("%s\n[%d/%d] %s -> ", frase, corrente, numeroTotale, parola);
-    }
-
-    private void stampaManuale() {
-        System.out.printf("Specificare:\n");
-        
-        GuardianoDelleParole.parole().forEach(tp -> System.out.printf("%s -> %s\n", tp, tp.sigla()));
-    }
-
-    private int raccogliIndice(String input, int corrente, int dimensioneMassima) {
-        if (!consolle.salta(input))
-            return corrente;
-        
-        int salto = consolle.prendiSalto(input);
-        
-        return salto < dimensioneMassima ? salto : dimensioneMassima;
-    }
-
-    private boolean nota(String parola, MappaParoleMultiple mappaParole) {
-        return mappaParole.contiene(parola);
-    }
-
-    private String tieniFrase(String frase, String parola, int corrente) {
-                
-        frase = String.format("%s %s", frase, parola);
-            
-        if (corrente % 15 == 0)
-            frase += "\n";
-        
-        return frase;
     }
 }

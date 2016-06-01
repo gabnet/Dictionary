@@ -12,22 +12,23 @@ import dizionario.modelli.Verbo;
  *
  * @author gorig
  */
-public class Facile implements IAnello{
+public class Radice implements IAnello {
 
     @Override
     public String metodo() {
-        return "Facile";
+        return "Radice";
     }
 
     
     @Override
     public Verbo proponi(String input, MappaVerbi mappaVerbi) {
-
-        Verbo presente = null;
         
-        if (mappaVerbi.contiene(input))
-            presente = mappaVerbi.verbo(input);
+        Verbo presente = null;
             
+        for(Verbo v : mappaVerbi.values())
+            if (input.startsWith(v.radice()))
+                presente = v;
+                    
         return presente;
     }
 }

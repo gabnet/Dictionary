@@ -10,8 +10,10 @@ import dizionario.modelli.MappaParoleMultiple;
 import dizionario.modelli.MappaVerbi;
 import dizionario.modelli.Verbo;
 import dizionario.utilita.Consolle;
+import dizionario.utilita.Stampante;
 import dizionario.utilita.verbi.Facile;
 import dizionario.utilita.verbi.IAnello;
+import dizionario.utilita.verbi.Radice;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -28,11 +30,7 @@ public class AlunnoLiceale {
     private final GestoreParole gestoreParole;
     private final Consolle consolle;
     
-    private ArrayList<IAnello> anelli = new ArrayList<IAnello>(){
-        {
-            new Facile();
-        }
-    };
+    private final ArrayList<IAnello> anelli = new ArrayList<>();
     
     public AlunnoLiceale(String mappaParoleFile, String mappaVerbiFile, String inputFile, GestoreParole gestoreParole, Consolle consolle){
         this.mappaParoleFile = mappaParoleFile;
@@ -40,6 +38,9 @@ public class AlunnoLiceale {
         this.inputFile = inputFile;
         this.gestoreParole = gestoreParole;
         this.consolle = consolle;
+        
+        this.anelli.add(new Facile());
+        this.anelli.add(new Radice());
     }
 
     public int calcolaVerbi() {
@@ -79,21 +80,21 @@ public class AlunnoLiceale {
             parola = elencoParole.get(indice);
             
             do {
-                stampaInput(elencoParole.get(indice), indice + 1, elencoParole.size());
+                Stampante.stampaManuale();
+                
+                Stampante.stampaInput(parola, indice + 1, elencoParole.size());
             
                 input = consolle.prendi();
 
-            } while (!consolle.inputOk(input) && !consolle.inputOkVerbi(input));
+            } while (!consolle.inputOk(input));
             
             if (!consolle.successivo(input) && !consolle.salta(input)) {
                 mappaParole.put(parola, input);
-                mappaVerbi = trovaVerbo(input, mappaVerbi);
+                
+                if  (consolle.inputOkVerbi(input))
+                    mappaVerbi = trovaVerbo(parola, mappaVerbi);
             }
         }
-    }
-
-    private void stampaInput(String parola, int corrente, int numeroTotale) {
-        System.out.printf("[%d/%d] %s -> ", corrente, numeroTotale, parola);
     }
 
     private MappaVerbi trovaVerbo(String coniugato, MappaVerbi mappaVerbi) throws IOException {
@@ -101,13 +102,25 @@ public class AlunnoLiceale {
         Verbo proposto = null;
         
         for(IAnello anello : anelli){
+            
+            Stampante.stampaMetodo(anello.metodo());
+            
             proposto = anello.proponi(coniugato, mappaVerbi);
             
-            if (conferma(coniugato, proposto))
+            Stampante.stampaNessunaProposta();
+            
+            if (proposto != null && Stampante.conferma(coniugato, proposto, consolle))
                 break;
         }
+
+        if (proposto != null){
+            Stampante.stampaInputConfermato(coniugato, proposto.infinito());
+            aggiornaMappaVerbi(coniugato, proposto, mappaVerbi);
+        }
+        else
+            Stampante.stampaInputNonTrovato(coniugato);
         
-        return aggiornaMappaVerbi(coniugato, proposto, mappaVerbi);
+        return mappaVerbi;
     }
 
     private MappaVerbi aggiornaMappaVerbi(String input, Verbo confermato, MappaVerbi mappaVerbi) {
@@ -115,15 +128,5 @@ public class AlunnoLiceale {
         mappaVerbi.put(confermato.infinito(), confermato);
         
         return mappaVerbi;
-    }
-
-    private void stampaInputConferma(String coniugato, String infinito) {
-        System.out.printf("%s --> %s", coniugato, infinito);
-    }
-
-    private boolean conferma(String coniugato, Verbo proposta) throws IOException {
-        stampaInputConferma(coniugato, proposta.infinito());
-            
-        return consolle.confermato();
     }
 }

@@ -7,6 +7,7 @@ package dizionario.utilita.verbi;
 
 import dizionario.modelli.MappaVerbi;
 import dizionario.modelli.Verbo;
+import java.util.Optional;
 
 /**
  *
@@ -14,5 +15,6 @@ import dizionario.modelli.Verbo;
  */
 public interface IAnello {
     
+    public String metodo();
     public Verbo proponi(String input, MappaVerbi mappaVerbi);
 }

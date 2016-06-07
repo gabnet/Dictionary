@@ -80,7 +80,10 @@ public class GestoreParole {
         MappaVerbi mappaVerbi = new MappaVerbi();
         
         proprieta.entrySet().forEach(v -> {
-            Verbo verbo = new Verbo(v.getKey().toString(), v.getValue().toString());
+            String verbi = v.getValue().toString().trim();
+            if ("".equalsIgnoreCase(verbi))
+                verbi = null;
+            Verbo verbo = new Verbo(v.getKey().toString().trim(), verbi);
             mappaVerbi.put(v.getKey().toString(), verbo);
         });
         

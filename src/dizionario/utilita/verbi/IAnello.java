@@ -7,7 +7,6 @@ package dizionario.utilita.verbi;
 
 import dizionario.modelli.MappaVerbi;
 import dizionario.modelli.Verbo;
-import java.util.Optional;
 
 /**
  *

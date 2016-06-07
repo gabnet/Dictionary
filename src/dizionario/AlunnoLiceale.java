@@ -11,6 +11,7 @@ import dizionario.modelli.MappaVerbi;
 import dizionario.modelli.Verbo;
 import dizionario.utilita.Consolle;
 import dizionario.utilita.Stampante;
+import dizionario.utilita.verbi.Dizionario;
 import dizionario.utilita.verbi.Facile;
 import dizionario.utilita.verbi.IAnello;
 import dizionario.utilita.verbi.Radice;
@@ -41,6 +42,7 @@ public class AlunnoLiceale {
         
         this.anelli.add(new Facile());
         this.anelli.add(new Radice());
+        this.anelli.add(new Dizionario());
     }
 
     public int calcolaVerbi() {
@@ -107,7 +109,8 @@ public class AlunnoLiceale {
             
             proposto = anello.proponi(coniugato, mappaVerbi);
             
-            Stampante.stampaNessunaProposta();
+            if (proposto == null)
+                Stampante.stampaNessunaProposta();
             
             if (proposto != null && Stampante.conferma(coniugato, proposto, consolle))
                 break;
@@ -124,7 +127,8 @@ public class AlunnoLiceale {
     }
 
     private MappaVerbi aggiornaMappaVerbi(String input, Verbo confermato, MappaVerbi mappaVerbi) {
-            
+
+        confermato.aggiungiVerbo(input);
         mappaVerbi.put(confermato.infinito(), confermato);
         
         return mappaVerbi;

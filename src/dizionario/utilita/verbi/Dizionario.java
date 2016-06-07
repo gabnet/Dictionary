@@ -7,26 +7,23 @@ package dizionario.utilita.verbi;
 
 import dizionario.modelli.MappaVerbi;
 import dizionario.modelli.Verbo;
+import dizionario.utilita.dizionario.ConnettoreDizionarioOnline;
 
 /**
  *
  * @author gorig
  */
-public class Facile implements IAnello{
+public class Dizionario implements IAnello {
 
     @Override
     public String metodo() {
-        return "Facile";
+        return "Dizionario";
     }
 
     @Override
     public Verbo proponi(String input, MappaVerbi mappaVerbi) {
-
-        Verbo presente = null;
+        String infinito = ConnettoreDizionarioOnline.prendiInfinito(input);
         
-        if (mappaVerbi.contiene(input))
-            presente = mappaVerbi.verbo(input);
-            
-        return presente;
+        return mappaVerbi.get(infinito);
     }
 }

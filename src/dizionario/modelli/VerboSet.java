@@ -15,6 +15,6 @@ public class VerboSet extends HashSet<String> {
     
     @Override
     public String toString(){
-        return this.stream().reduce("", (output, vs) -> output = String.format("%s, %s", output, vs)).replaceFirst(", ", "");
+        return this.stream().reduce("", (output, vs) -> output = String.format("%s,%s", output, vs)).replaceFirst(",", "");
     }
 }

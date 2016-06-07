@@ -23,7 +23,7 @@ public class Verbo extends Parola {
         super(TipoParola.VERBO, GuardianoDelleParole.siglaPerTipoParola(TipoParola.VERBO));
         this.infinito = infinito;
         this.radice = radice(verbo);
-        this.verbiNoti = verbiNoti(verbo);
+        this.verbiNoti = verbo == null || "".equalsIgnoreCase(verbo) ? new VerboSet() : verbiNoti(verbo);
     }
     
     @Override

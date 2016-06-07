@@ -17,7 +17,7 @@ import java.io.IOException;
 public class Stampante {
     
     public static void stampaInputConferma(String coniugato, String infinito) {
-        System.out.printf("propone: %s --> %s", coniugato, infinito);
+        System.out.printf("propone: %s --> %s? [S/N] ", coniugato, infinito);
     }
 
     public static boolean conferma(String coniugato, Verbo proposta, Consolle consolle) throws IOException {
@@ -27,7 +27,7 @@ public class Stampante {
     }
 
     public static void stampaInputConfermato(String coniugato, String infinito) {
-        System.out.printf("\nConfermato %s --> %s", coniugato, infinito);
+        System.out.printf("\nConfermato %s --> %s\n", coniugato, infinito);
     }
 
     public static void stampaInputNonTrovato(String coniugato) {
@@ -43,7 +43,7 @@ public class Stampante {
     }
     
     public static void stampaManuale() {
-        System.out.printf("Specificare:\n");
+        System.out.printf("\nSpecificare:\n");
         
         GuardianoDelleParole.parole().forEach(tp -> System.out.printf("%s -> %s\n", tp.tipoParola().toString(), tp.sigla()));
     }
